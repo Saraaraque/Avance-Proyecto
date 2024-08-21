@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Ubuntu" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <style>
+        body {
+            background: #c1bdba;
+            font-family: "Ubuntu", helvetica, sans-serif;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #000000;
+            transition: .5s ease;
+        }
+        
+        a:hover {
+            color: #159b6e;
+        }
+        
+        #mini-menu {
+            display: none; /* Ocultar por defecto */
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            background:rgb(195 195 195 / 90%);
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 4px 10px 4px rgb(207 209 211 / 30%);
+        }
+        
+        .contenedor-formularios {
+            background: rgba(19, 35, 47, 0.9);
+            padding: 40px;
+            max-width: 600px;
+            margin: 40px auto;
+            border-radius: 4px;
+            box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+            display: none; /* Ocultar por defecto */
+        }
+        
+        .contenedor-tabs {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 40px 0;
+        }
+        
+        .contenedor-tabs:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        .contenedor-tabs li a {
+            display: block;
+            text-decoration: none;
+            padding: 15px;
+            background: rgba(160, 179, 176, 0.25);
+            color: #a0b3b0;
+            font-size: 20px;
+            float: left;
+            width: 50%;
+            text-align: center;
+            cursor: pointer;
+            transition: .5s ease;
+        }
+        
+        .contenedor-tabs li a:hover {
+            background: #159b6e;
+            color: #fff;
+        }
+        
+        .contenedor-tabs .active a {
+            background: #1ab188;
+            color: #fff;
+        }
+        
+        .contenido-tab > div:last-child {
+            display: none;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #fff;
+            font-weight: 300;
+            margin: 0 0 40px;
+        }
+        
+        label {
+            position: absolute;
+            transform: translateY(6px);
+            left: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.25s ease;
+            font-size: 22px;
+        }
+        
+        label.req {
+            margin: 2px;
+            color: #1ab188;
+        }
+        
+        label.active {
+            transform: translateY(50px);
+            left: 2px;
+            font-size: 14px;
+        }
+        
+        label.highlight {
+            color: #fff;
+        }
+        
+        input {
+            font-size: 22px;
+            display: block;
+            width: 100%;
+            padding: 5px 10px;
+            background: none;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            color: #fff;
+            border-radius: 5px;
+            transition: all 0.5s ease;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #1ab188;
+        }
+        
+        .contenedor-input {
+            position: relative;
+            margin-bottom: 40px;
+        }
+        
+        .fila-arriba:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        .fila-arriba div {
+            float: left;
+            width: 48%;
+            margin-right: 4%;
+        }
+        
+        .fila-arriba div:last-child {
+            margin: 0;
+        }
+        
+        .button {
+            border: 0;
+            outline: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 15px 0;
+            font-size: 2rem;
+            background: #c1c1c100;
+            color: #000;            ;
+            transition: all .5s ease;
+        }
+        
+        .button:hover,
+        .button:focus {
+            background: #0dcaf03b;
+        }
+        
+        .button-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .forgot {
+            margin-top: -20px;
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        
+        @media screen and (max-width: 500px) {
+            .fila-arriba div {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 40px;
+            }
+        }
+        
+        @media screen and (max-width: 400px) {
+            .contenedor-tabs li a {
+                width: 100%;
+            }
+        }
+        
+        .mensaje {
+            text-align: center;
+            color: #fff;
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .error-message {
+            color: #ff4d4d; /* Rojo para mensajes de error */
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <button id="usuarios-btn" class="button">Usuarios</button>
+    <div id="mini-menu">
+        <a href="#registrarse" onclick="openForm('registrarse')">Registrarse</a>
+        <a href="#iniciar-sesion" onclick="openForm('iniciar-sesion')">Iniciar sesión</a>
+    </div>
+    
+    <!-- Formulario de Registro -->
+    <div id="form-registrarse" class="contenedor-formularios">
+        <h2>Formulario de Registro</h2>
+        <form id="register-form" onsubmit="return handleFormSubmit('register-form', 'registro')">
+            <div class="contenedor-input">
+                <input type="text" id="reg-username" name="username" placeholder="Ingrese su nombre de usuario" required>
+                <div id="error-username" class="error-message"></div>
+            </div>
+            <div class="contenedor-input">
+                <input type="password" id="reg-password" name="password" placeholder="Ingrese su contraseña" required minlength="8">
+                <div id="error-password" class="error-message"></div>
+            </div>
+            <div class="contenedor-input">
+                <input type="password" id="reg-password" name="password" placeholder="Ingrese su contraseña" required minlength="8">
+                <div id="error-password" class="error-message"></div>
+            </div>
+            <button type="submit" class="button">Registrarse</button>
+            <div id="mensaje-registro" class="mensaje"></div>
+        </form>
+        <button onclick="closeForm()" class="button">Cerrar</button>
+    </div>
+
+    <!-- Formulario de Inicio de Sesión -->
+    <div id="form-iniciar-sesion" class="contenedor-formularios">
+        <h2>Formulario de Inicio de Sesión</h2>
+        <form id="login-form" onsubmit="return handleFormSubmit('login-form', 'inicio')">
+            <div class="contenedor-input">
+                <input type="text" id="login-username" name="username" placeholder="Ingrese su nombre de usuario" required>
+                <div id="error-login-username" class="error-message"></div>
+            </div>
+            <div class="contenedor-input">
+                <input type="password" id="login-password" name="password" placeholder="Ingrese su contraseña" required minlength="8">
+                <div id="error-login-password" class="error-message"></div>
+            </div>
+            <button type="submit" class="button">Iniciar sesión</button>
+            <div id="mensaje-login" class="mensaje"></div>
+        </form>
+        <button onclick="closeForm()" class="button">Cerrar</button>
+    </div>
+
+    <script>
+        document.getElementById('usuarios-btn').addEventListener('click', function(event) {
+            const menu = document.getElementById('mini-menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            event.stopPropagation(); // Prevenir que el clic en el botón cierre el menú
+        });
+
+        function openForm(formId) {
+            // Ocultar ambos formularios
+            document.getElementById('form-registrarse').style.display = 'none';
+            document.getElementById('form-iniciar-sesion').style.display = 'none';
+
+            // Mostrar el formulario seleccionado
+            document.getElementById('form-' + formId).style.display = 'block';
+
+            // Ocultar el menú
+            document.getElementById('mini-menu').style.display = 'none';
+        }
+
+        function closeForm() {
+            document.getElementById('form-registrarse').style.display = 'none';
+            document.getElementById('form-iniciar-sesion').style.display = 'none';
+        }
+
+        function handleFormSubmit(formId, actionType) {
+            const form = document.getElementById(formId);
+            const username = form.querySelector('input[name="username"]').value;
+            const password = form.querySelector('input[name="password"]').value;
+
+            let isValid = true;
+            let message = '';
+
+            // Limpiar mensajes de error
+            const errorUsername = form.querySelector('.error-message');
+            const errorPassword = form.querySelectorAll('.error-message')[1]; // Seleccionar el segundo mensaje de error
+
+            errorUsername.textContent = '';
+            errorPassword.textContent = '';
+
+            // Validaciones
+            if (!username || !password) {
+                isValid = false;
+                message = 'Por favor, complete todos los campos.';
+                if (formId === 'register-form') {
+                    errorUsername.textContent = 'El nombre de usuario es obligatorio.';
+                    errorPassword.textContent = 'La contraseña es obligatoria.';
+                } else {
+                    document.getElementById('error-login-username').textContent = 'El nombre de usuario es obligatorio.';
+                    document.getElementById('error-login-password').textContent = 'La contraseña es obligatoria.';
+                }
+            } else if (password.length < 8) {
+                isValid = false;
+                message = 'La contraseña debe tener al menos 8 caracteres.';
+                if (formId === 'register-form') {
+                    errorPassword.textContent = 'La contraseña debe tener al menos 8 caracteres.';
+                } else {
+                    document.getElementById('error-login-password').textContent = 'La contraseña debe tener al menos 8 caracteres.';
+                }
+            } else {
+                message = actionType === 'registro' ? 'Registro exitoso.' : 'Inicio de sesión exitoso.';
+            }
+
+            document.getElementById(`mensaje-${actionType}`).innerText = message;
+            document.getElementById(`mensaje-${actionType}`).style.color = isValid ? '#1ab188' : '#ff4d4d'; // Verde para éxito, rojo para error
+
+            // Evitar el envío real para fines de demostración
+            return isValid;
+        }
+
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mini-menu');
+            const button = document.getElementById('usuarios-btn');
+            if (!menu.contains(event.target) && !button.contains(event.target)) {
+                menu.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
